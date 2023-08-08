@@ -1,0 +1,200 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock title %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="{% static 'css/base_nav.css' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
+  {% block head %}{% endblock head %}
+
+  <style>
+    {% block style %}
+    {% endblock style %}
+    body {
+      background-image: url(/static/img/background2.jpg);
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+
+<body class="">
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'info' %}
+          Swal.fire({
+            icon: 'success',
+            title: 'Good job!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    
+      // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'warning' %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          Swal.fire({
+            icon: 'success',
+            title: '완료되었습니다!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    </script>
+  {% endfor %}
+{% endif %}
+
+  <!-- nav 바-->
+  <nav class="fixed top-0 w-full bg-[#191b22] z-[100]">
+    <div class="flex items-center justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold w-full">
+      <a class="ml-3 py-6" href="{% url 'planets:main' %}">
+        <img type="button" style="width:150px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+      </a>
+      <div class="flex items-center text-sm text-white px-3">
+
+        {% if user.is_authenticated %}
+        <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer flex items-center hover:text-yellow-400" alt="User dropdown">{{ user.username }}<span class="material-symbols-outlined">
+          arrow_drop_down
+          </span></a>
+        {% else %}
+        <a href="{% url 'accounts:login' %}" class="text-sm text-white me-5">login</a>
+        <a href="{% url 'accounts:contract' %}" class="text-sm text-white ">Signup</a>
+        {% endif %}
+        
+        <!-- Dropdown menu -->
+        <div id="userDropdown" class="z-10 hidden divide-y rounded-lg shadow w-44 bg-[#191b22] divide-gray-600">
+          <div class="px-4 py-3 text-sm text-white">
+            <div>Menu</div>
+          </div>
+          <ul class="py-2 text-sm text-gray-200" aria-labelledby="avatarButton">
+            <li>
+              <a href="{% url 'accounts:profile' user %}" class="block px-4 py-2  hover:text-yellow-400">내 프로필</a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:profile_update' %}" class="block px-4 py-2  hover:text-yellow-400">프로필 수정</a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:services' %}" class="block px-4 py-2  hover:text-yellow-400">서비스 소개</a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:membership' %}" class="block px-4 py-2  hover:text-yellow-400">멤버쉽 가입</a>
+            </li>
+            <li>
+              <a href="{% url 'planets:planet_list' %}" class="block px-4 py-2  hover:text-yellow-400">행성 둘러보기</a>
+            </li>
+          </ul>
+          <div class="py-1">
+            <form action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="block px-4 py-2 text-sm  text-gray-200 hover:text-yellow-400">로그아웃</button>
+            </form>
+          </div>
+        </div>
+        <div class="p-1">
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto">
+      <div class="hidden border-b-2 border-[#393f4f] w-full" id="navbar-hamburger">
+        <div>
+          <a href="#" class="block py-2 pl-3 pr-4 my-2 text-white text-center rounded hover:bg-[#ffd951]">Home</a>
+        </div>
+        <div>
+          <a href="#" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">Services</a>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div>
+          <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
+        </div>
+        <div class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">
+          <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- drawer component -->
+  <div id="drawer-right-example" class="fixed top-24 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-[#191b22] w-60" tabindex="-1" aria-labelledby="drawer-right-label">
+    <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto">
+      <div class="w-full" id="navbar-hamburger">
+        {% if user.is_authenticated %}
+        <div>
+          <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
+        </div>
+        <div class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">
+          <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+<div class="flex mt-16">
+</div>
+
+    {% block content %}
+    {% endblock content %}
+  </div>
+<div style="height:100px;"></div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+{% block script %}
+<script>
+  // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+  {% for message in messages %}
+    {% if message.tags == 'info' %}
+      Swal.fire({
+        icon: 'success',
+        title: 'Good job!',
+        text: '{{ message }}',
+      });
+    {% endif %}
+  {% endfor %}
+
+  // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+  {% for message in messages %}
+    {% if message.tags == 'warning' %}
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ message }}',
+      });
+    {% endif %}
+  {% endfor %}
+</script>
+
+{% endblock script %}
+</html>

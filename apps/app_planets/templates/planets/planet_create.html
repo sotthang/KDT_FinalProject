@@ -1,0 +1,49 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/planet_create.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class="flex flex-col justify-center max-w-768 items-center">
+  <div class=''>
+    <p class="text-2xl mt-10 m-5 w-full">행성 등록하기</p>
+    <hr class="border-t-2 border-yellow-300">
+  </div>
+  <div class="mt-5">
+    <form class="text-white" action="{% url 'planets:planet_create' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form | crispy }}
+      <div id="terms-of-service">
+        <p class="text-sm">이용약관</p>
+        <input class="" type="hidden" id="num-terms" name="termsofservice_count" value="0">
+        <div class="" id="term-fields-container"></div>
+        <div class="grid my-2">
+          <button class="text-md bg-gray-400 hover:bg-gray-500 py-1 rounded-md" type="button" id="add-term-btn">약관 추가하기</button>
+        </div>
+      </div>
+      <div class="grid mt-7">
+        <button type="submit" class="py-2 bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">다음으로</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="{% static 'js/planet_create.js' %}"></script>
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+{{ planet_name }}
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class=" container mx-auto flex justify-center">
+  <div class="w-full max-w-xl pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">행성 권한</p>
+    <hr class="border-t-2 border-yellow-300">
+    <form action="{% url 'planets:admin_member' planet_name %}" method="POST">
+      <div class="grid grid-cols-2 gap-5">
+      {% csrf_token %}
+      {% for account in accounts %}
+      <div class="col pl-5 py-2 my-3 rounded-lg bg-[#181A20] flex gap-4 relative">
+        {% if account.profile_image %}
+        <img src="{{ account.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+        {% else %}
+        <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+        {% endif %}
+        <div>
+          {% if account.admin_level != 3 %}
+          <p class="text-slate-400">{{ account.nickname }}</p>
+          <input type="text" name="account_pk" value="{{ account.pk }}" hidden>
+          <label>
+            <input type="radio" name="admin_level_{{ account.pk }}" value="2" {% if account.admin_level == 2 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            스태프
+          </label>
+          <label>
+            <input type="radio" name="admin_level_{{ account.pk }}" value="1" {% if account.admin_level == 1 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            사용자
+          </label>
+          {% else %}
+          <p class="text-slate-400">{{ account.nickname }} 👑</p>
+          <p>관리자</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+        </div>
+        <div class="grid mt-7">
+          <button type="submit" class="py-1 bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">제출하기</button>
+        </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

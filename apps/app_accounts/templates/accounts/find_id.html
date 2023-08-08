@@ -1,0 +1,59 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class=" container mx-auto flex justify-center">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">아이디 찾기</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="my-4">
+
+      <form action={% url 'accounts:find_id' %} method="POST">
+        {% csrf_token %}
+        <div class="flex gap-5">
+          <div>
+            <label for="last_name" class="mt-3 block text-sm font-medium text-slate-300">이름</label>
+            <input type="text" id="last_name" name="last_name" class="form-input mt-1 block w-full rounded-md bg-[#101013]" placeholder="" required>
+          </div>
+          <div>
+            <label for="first_name" class="mt-3 block text-sm font-medium text-slate-300">성</label>
+            <input type="text" id="first_name" name="first_name" class="form-input mt-1 block w-full rounded-md bg-[#101013]" placeholder="" required>
+          </div>
+        </div>
+
+        <label for="email" class="mt-3 block text-sm font-medium text-slate-300">E-mail</label>
+        <input type="text" id="email" name="email" class="form-input mt-1 block w-full rounded-md bg-[#101013] " placeholder="" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+        
+        <div class="grid mt-7">
+          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">제출하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% if message %}
+<script>
+  const message = "{{ message }}";
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+  });
+</script>
+{% endif %}
+{% endblock content %}
+

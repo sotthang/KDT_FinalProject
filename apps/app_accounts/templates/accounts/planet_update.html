@@ -1,0 +1,199 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block style %}
+.tag_profile {
+  height: 120px;
+  width: 120px; 
+  object-fit: cover;
+  position: relative;
+}
+.tag_crop {
+  height: 150px;
+  width: 300px; 
+  object-fit: cover;
+  position: relative;
+}
+
+.tag_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  vertical-align: middle;
+}
+{% endblock style %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class=" container mx-auto flex justify-center">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-2 pb-4 font-bold">프로필 수정</p>
+    <div class="my-1">
+      <form id="profile-form" action="{% url 'planets:planet_profile_update' planet.name user_by_planet.nickname  %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid">
+          <hr class="mb-6 border-t-2 w-full border-yellow-300">
+          <table class="">
+            <tr class="border-b-2 border-gray-500">
+              <th scope="col" class="px-6 py-3">
+                Nickname
+              </th>
+              <th scope="col" class="px-6 py-3 text-start">
+                <!-- ID -->
+                <input type="text" id="nickname" name="nickname" value="{{ user_by_planet.nickname }}" class="form-input mt-1 rounded-md bg-[#101013]" placeholder="Nickname">
+                <!-- 설명란 필요!-->
+              </th>
+            </tr>
+            <tr class="border-b-2 border-gray-500">
+              <th scope="col" class="px-6 py-3">
+                Profile
+              </th>
+              <th scope="col" class="px-6 py-3 text-start">
+                <!-- 프로필 사진 -->
+                <div class="bg-gray-700" style="position: relative; display: inline-block ">
+                  <div class="tag_profile">
+                  {% if user_by_planet.profile_image %}
+                    <img src="{{ user_by_planet.profile_image.url }}" class="absolute inset-0 m-auto tag_img" id="profile_id" style="width: 100%; height: 100%;">
+                    {% else %} 
+                    <img src="{% static 'img/profile.png' %}" class="absolute inset-0 m-auto tag_img" id="profile_id" style="width: 100%; height: 100%;">
+                  {% endif %} 
+                  </div>
+                  <button type="button" onclick="document.getElementById('id_profile_image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
+                    <span id="symbol1" class="material-symbols-outlined text-4xl" style="display:none;">
+                      person_add
+                    </span>
+                  </button>
+                  <input onchange="readURL1(this);" type="file" id="id_profile_image" name="profile_image" class="form-input" style="display: none;">
+                </div>
+                <br>
+              </th>
+            </tr>
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                Background
+              </th>
+              <th scope="col" class="px-6 py-3 text-start">
+                <!-- 배경사진 -->
+                <div class="bg-gray-700" style="position: relative; display: inline-block;">
+                  <div class="tag_crop">
+                  {% if user_by_planet.background_image %}
+                    <img src="{{ user_by_planet.background_image.url }}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;" >
+                    {% else %}
+                    <img src="{% static 'img/no_background_img.jpeg' %}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;" >
+                  {% endif %}
+                  </div>
+                  <button type="button" onclick="document.getElementById('id_background_image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
+                    <span id="symbol2" class="material-symbols-outlined text-4xl" style="display:none;">
+                      add_photo_alternate 
+                    </span>
+                  </button>
+                  <input onchange="readURL2(this);" type="file" id="id_background_image" name="background_image" class="form-input" style="display: none;">  
+                </div>
+              </th>
+            </tr>
+          </table>
+          <div class="grid mt-8">
+            <button id="create-profile-btn" class="bg-yellow-400 hover:bg-yellow-500 text-lg text-white font-bold py-1 px-4 rounded shadow" type="submit">제출하기</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="w-[500px]">
+      <hr class="mb-6 border-t-2 w-full border-yellow-300">
+    </div>
+    <form action="{% url 'planets:planet_withdraw' planet.name %}" method="POST" id="delete">
+      {% csrf_token %}
+      <label class="" for="delete">행성 탈퇴하기</label>
+      <br>
+      <input type="hidden" name="next" value="{{ request.path }}" />
+      <p class="text-slate-300 text-xs">이 행성 계정을 탈퇴하고 싶으면, <button id="deleteButton" onclick="confirmDelete(event)" type="submit" class="text-red-500 hover:text-red-600 underline">여기</button>를 누르세요. 계정을 삭제하게 되면 돌이킬 수 없습니다.</p>
+    </form>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}  
+<script>
+  var defaultProfileImage = "{% static 'img/profile.png' %}";
+
+  function readURL1(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profile_id').src = e.target.result;
+      };
+      var spanElement = document.getElementById('symbol1');
+      spanElement.style.display = 'none';
+  
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      {% if user_by_planet.profile_image %}
+      document.getElementById('profile_id').src = "{{ user_by_planet.profile_image.url }}";
+      {% else %}
+      document.getElementById('profile_id').src = defaultProfileImage;
+      {% endif %}
+    }
+  }
+
+  var defaultBackgroundImage = "{% static 'img/no_background_img.jpeg' %}";
+  function readURL2(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('background_id').src = e.target.result;
+      };
+      var spanElement = document.getElementById('symbol2');
+      spanElement.style.display = 'none';
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      {% if user_by_planet.background_image %}
+      document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
+      {% else %}
+      document.getElementById('background_id').src = defaultBackgroundImage;
+      {% endif %}
+    }
+  }
+
+  const deleteButton = document.querySelector("#deleteButton");
+  deleteButton.addEventListener("click", confirmDelete);
+
+  function confirmDelete(event) {
+    event.preventDefault();
+
+    Swal.fire({
+      title: '탈퇴하시겠습니까?',
+      text: "탈퇴하면 되돌릴 수 없습니다!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.querySelector("#delete").submit();
+        Swal.fire({
+          title: '탈퇴했습니다!',
+          text: 'success',
+          timer: 4000,
+          showConfirmButton: true,
+        });
+      }
+
+    });
+  }
+</script>
+{% endblock script %}

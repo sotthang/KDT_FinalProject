@@ -1,0 +1,70 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+      <span class="material-symbols-outlined">
+          chevron_left
+      </span>
+      Back
+  </a>
+</div>
+<div class="container mx-auto flex justify-center">
+  <div class="w-full max-w-lg pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">가입 관리</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="planet_name hidden">{{planet.name}}</div>
+    <div class="confirm-list">
+      {% for confirm in confirms %}
+      <div class="relative" id="join-form-{{ confirm.user.pk }}">  
+        <form class="join-confirm" data-user-pk="{{ confirm.user.pk }}" method="POST">
+          {% csrf_token %}
+          <p class="hidden">{{ confirm.user }} </p>
+          <div class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-3/4 flex mb-5 gap-4 relative">
+            {% if confirm.profile_image %}
+              <img src="{{ confirm.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+            {% else %}
+              <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+            {% endif %}
+            <div class="">
+              <p class="text-white">{{ confirm.nickname }}</p>
+              <a type="button" href="{% url 'planets:planet_profile' planet_name=confirm.planet.name nickname=confirm.nickname %}" class="text-slate-400 hover:text-yellow-400 hover:underline">프로필 보기</a>
+            </div>
+            <p class="absolute right-5 bottom-2 text-slate-400 text-xs">{{ confirm.created_at|date:'m d, Y' }}</p>
+          </div>
+          <button type="submit" value="가입 승인" class="absolute right-52 bottom-7 rounded-full text-sm px-4 py-1 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300" onclick="approveRegistration({{ confirm.user.pk }})">승인</button>
+        </form>
+        <form class="join-reject" data-user-pk="{{ confirm.user.pk }}" method="POST">
+          {% csrf_token %}
+          <button type="submit" value="가입 거절" class="absolute right-36 bottom-7 rounded-full text-sm px-4 py-1 bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300" onclick="rejectRegistration({{ confirm.user.pk }})">거절</button>
+        </form> 
+      </div> 
+      {% empty %}
+      <p class="mt-10 text-center text-gray-200">가입 대기중인 유저가 없습니다</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/planet_join_admin.js' %}"></script>
+<script>  
+  function approveRegistration(userPk) {
+    var hiddenSubmitButton = document.getElementById("hiddenSubmitButton-" + userPk);
+    hiddenSubmitButton.click();
+  }
+  
+  function rejectRegistration(userPk) {
+    var hiddenRejectButton = document.getElementById("hiddenRejectButton-" + userPk);
+    hiddenRejectButton.click();
+  }
+  
+</script>
+{% endblock script %}

@@ -1,0 +1,123 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block content %}
+<p class="mb-7 text-3xl font-bold">이용약관</p>
+<hr class="border-t-2 border-yellow-300">
+<div class="relative overflow-x-auto rounded-md">
+  <table class="w-full text-md text-left text-gray-500 dark:text-gray-400 ">
+    <tbody>
+      <!-- 기본 양식 -->
+      <tr class="border-b dark:border-gray-700">
+        <th scope="row" class="pl-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
+            <span class="text-white font-bold">0</span>
+          </div>
+        </th>
+        <td class="px-6 pt-4 ">
+          <p>아래의 내용들은 이 행성에 들어오기 위한 조건이며 , 숙지하시고 불이행 시 불이익을 받을 수 있습니다.</p>
+          <div class="text-right my-2">
+            <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+            <label for="ck1">동의합니다</label>
+          </div>
+        </td>
+      </tr>
+    {% for termofservice in termsofservice %}
+    <tr class="border-b dark:border-gray-700">
+      <th scope="row" class="pl-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
+          <span class="text-white font-bold">{{ termofservice.order }}</span>
+        </div>
+      </th>
+      <td class="px-6 pt-4 ">
+        <p>{{ termofservice.content }}</p>
+        <div class="text-right my-2">
+          <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+          <label for="ck1">동의합니다</label>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<div class="my-8">
+  <div class="text-right">
+    <input type="checkbox" id="order2_chk" class="mr-2 ">
+    <label for="order2_chk">모든 이용약관에 동의합니다</label>
+  </div>
+</div>
+<div class="btnArea grid">
+  <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">다음으로</button>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const termsCheckbox = document.getElementById('terms-checkbox');
+      const profileForm = document.getElementById('profile-form');
+  
+      profileForm.addEventListener('submit', function(e) {
+        if (!termsCheckbox.checked) {
+          e.preventDefault();
+          alert('이용 약관에 동의해야 합니다.');
+        }
+      });
+    });
+  </script>
+
+<script>
+	function redirectToSignupPage() {
+		window.location.href = "{% url 'planets:planet_join' planet.name %}";
+	  }
+	$(document).ready(function(){
+
+		//전체 체크 클릭 시, 나머지 체크 
+		$("#order2_chk").click(function(){
+		var order2Chk=$("#order2_chk").prop("checked");
+		
+			if(order2Chk){
+				$(".order2_chks").prop("checked",true);
+				$(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}
+			else{
+				$(".order2_chks").prop("checked",false);
+				$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			}
+		});
+		
+		// 모든 체크박스를 클릭하면 버튼 활성화시키기
+		$('.order2_chks').click(function(){
+			var tmpp = $(this).prop('checked'); 
+			//자식 체크 전체 체크시, 부모 체크박스 체크 됨
+			var tt = $(".order2_chks").length;
+			var ss = $(".order2_chks:checked").length;
+			
+			{% comment %} 
+      //선택한 체크박스 값이 true 이거나 체크박스 1개 이상 체크시 버튼 활성화시키기
+			if(tmpp==true || ss>0){
+			$(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}
+			else{
+			$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			} 
+      {% endcomment %}
+			
+			
+			// 체크박스가 모두 선택되었을 때 상위 체크박스 선택되도록 설정
+			if(tt == ss){
+				$("#order2_chk").prop("checked",true);
+        $(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}else{
+				$("#order2_chk").prop("checked",false);
+        $(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			}
+			});
+		});
+</script>
+{% endblock script %}

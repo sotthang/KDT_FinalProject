@@ -1,0 +1,114 @@
+{% extends 'base_index.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/index_list.css' %}">
+{% endblock head %}
+
+{% block content %}
+  <div class="container mx-auto max-w-4xl my-8">
+    <div class="my-4 mx-auto w-[95%] border-b-2 border-[#393f4f]">
+      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">자주 이용하는 행성</p> <!-- Planet lists -->
+      {% if user_by_planets_star %}
+        {% for user_by_planets_star in user_by_planets_star %}
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover-grow hover-bg w-[100%] flex mb-5 gap-4 relative">
+            {% if user_by_planets_star.profile_image %}
+              <img src="{{ user_by_planets_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+            {% else %}
+              <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+            {% endif %}
+            <div class="">
+              <p class="text-slate-200">{{ user_by_planets_star.planet.name }}</p> 
+              <p class="text-slate-400">{{ user_by_planets_star.nickname }}</p>
+            </div>
+            <p class="absolute right-2 bottom-8">⭐</p>
+            <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planets_star.created_at|date:'m d, Y' }}</p>
+          </a>
+        {% endfor %}
+      {% else %}
+        <div class="w-full text-center h-[200px] flex justify-center items-center">
+          <p class="mb-12">행성이 존재하지 않습니다.</p>
+        </div>
+      {% endif %}
+
+      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">내가 가입한 행성</p> <!-- Planet lists -->
+      {% if user_by_planets_not_star %}
+        {% for user_by_planets_not_star in user_by_planets_not_star %}
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_not_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover-grow hover-bg w-[100%] flex mb-5 gap-4 relative">
+            {% if user_by_planets_not_star.profile_image %}
+              <img src="{{ user_by_planets_not_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+            {% else %}
+              <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+            {% endif %}
+            <div>
+              <p class="text-slate-200">{{ user_by_planets_not_star.planet.name }}</p>
+              <p class="text-slate-400">{{ user_by_planets_not_star.nickname }}</p>
+            </div>
+            <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planets_not_star.created_at|date:'m d, Y' }}</p>
+          </a>
+        {% endfor %}
+      {% else %}
+      <div class="w-full text-center h-[200px] flex justify-center items-center">
+        <p class="mb-12">행성이 존재하지 않습니다.</p>
+      </div>
+      {% endif %}
+
+      {% if planet_recommends or planet_not_recommends %}
+      <div class="flex flex-row justify-between pt-5 mb-5 border-t-2 border-[#393f4f]">
+        <p class="text-xl">이런 행성은 어때요?</p>
+        <p class="text-xs mt-2 me-2 text-slate-400"><a href="{% url 'planets:planet_list' %}">행성 리스트로 이동하기</a></p>
+      </div>
+        {% for planet_recommend in planet_recommends %}
+          <div class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
+            {% if planet_recommend.image %}
+              <img src="{{ planet_recommend.image.url }}" alt="image" class="inline-block rounded-md" width="100" height="50">
+            {% else %}
+              <img src="{% static 'img/no_planet_img.png' %}" alt="no_image" class="inline-block rounded-md" width="100" height="50">
+            {% endif %}
+            <div>
+              <p class="text-slate-200">{{ planet_recommend.name }}</p>
+              <p class="text-slate-400">{{ planet_recommend.category }}</p>
+            </div>
+            <a href="{% url 'planets:planet_contract' planet_recommend.name %}">
+              <button class="absolute right-3 bottom-0.5 button-big button-color-join my-3">
+                <p class="text-sm">join</p>
+              </button>
+            </a>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% for planet_not_recommend in planet_not_recommends %}
+        <div class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
+          {% if planet_not_recommend.image %}
+            <img src="{{ planet_not_recommend.image.url }}" alt="image" class="inline-block rounded-md" width="100" height="50">
+          {% else %}
+            <img src="{% static 'img/no_planet_img.png' %}" alt="no_image" class="inline-block rounded-md" width="100" height="50">
+          {% endif %}
+          <div>
+            <p class="text-slate-200">{{ planet_not_recommend.name }}</p>
+            <p class="text-slate-400">{{ planet_not_recommend.category }}</p>
+          </div>
+          <a href="{% url 'planets:planet_contract' planet_not_recommend.name %}">
+            <button class="absolute right-3 bottom-0.5 button-big button-color-join my-3">
+              <p class="text-sm">join</p>
+            </button>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  var requestuser = "{{ request.user }}";
+  var requestuser_nickname= "{{ user.nickname }}";
+</script>
+{% endblock script %}

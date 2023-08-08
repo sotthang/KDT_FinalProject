@@ -1,0 +1,54 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+<div class="flex flex-col justify-center max-w-768 items-center pt-20 p-10 bg-cover bg-center" style=" z-index: 10;"> 
+  <img type="button" class=" md:w-[500px] w-[300px]" src="{% static 'img/main_logo.png' %}" alt="">
+  <p class="text-base text-gray-200 mt-16 md:text-2xl">캣츠모스에 오신걸 환영합니다!</p>
+  <p class="text-base mt-3 text-gray-200 md:text-2xl">나만의 행성을 만들거나 행성에 <br class="md:hidden"> 가입해 사람들과 소통해보세요!</p>
+</div>
+<div class="flex justify-center items-center">
+  {% if request.user.is_authenticated %}
+  <div class='flex flex-col'>
+    <div class='flex'>
+      <a href="{% url 'planets:planet_list' %}">
+        <button class="button-setting m-5">
+          <p class="text-base">행성 둘러보기</p>
+        </button>
+      </a>
+      <a href="{% url 'accounts:profile' user %}">
+        <button class="button-setting m-5">
+          <p class="text-base">프로필</p>
+        </button>
+      </a>
+    </div>
+  </div>
+  {% else %}
+  <div class='flex mb-20'>
+    <a href="{% url 'planets:planet_list' %}">
+      <button class="button-setting m-5">
+        <p class="text-base">행성 둘러보기</p>
+      </button>
+    </a>
+    <a href="{% url 'accounts:login' %}">
+      <button class="button-setting m-5">
+        <p class="text-base">로그인</p>
+      </button>
+    </a>
+  </div>
+  {% endif %}
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

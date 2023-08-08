@@ -1,0 +1,21 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class="max-w-[540px] h-screen mx-auto text-center">
+  <div class="w-full pt-10">
+    <p class="text-2xl py-5">유효하지 않은 링크입니다.</p>
+    <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" ><a href="{% url 'accounts:login' %}">로그인</a></button>
+  </div>
+</div>
+{% endblock content %}

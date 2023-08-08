@@ -1,0 +1,79 @@
+{% extends 'base_index.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/planet_introduction.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="container mx-auto max-w-4xl my-8">
+  <div class="my-4 mx-auto w-[90%] border-t-2 border-[#393f4f]">
+    {% if planet.image %}
+      <img src="{{ planet.image.url }}" alt="image" class="inline-block rounded-md" width="100%" height="50%">
+    {% else %}
+      <img src="{% static 'img/no_planet_img.png' %}" alt="no_image" class="inline-block rounded-md" width="100%" height="50%">
+    {% endif %}
+    <div class="flex flex-row justify-between">
+      <p class="text-2xl pt-5 mb-2">{{ planet.name }}</p>
+      {% if user.star %}
+      <div class="flex ms-5 me-auto pt-6">
+        <div>
+          <button>
+            <i id="star" class="fa-solid fa-star fa-lg hover-grow" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i>
+          </button>
+        </div>
+      </div>
+      {% else %}
+        <div class="flex ms-5 me-auto pt-6">
+          <div>
+            <button><i id="star" class="fa-regular fa-star fa-lg" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i></button>
+          </div>
+        </div>
+      {% endif %}
+      <p class="text-sm text-[#bcbdbf] pt-6 mb-5 me-2">{{ planet.current_capacity }}/{{ planet.maximum_capacity }}명</p>
+    </div>
+    <div>
+      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">행성 소개</p>
+      <p class="mb-5">{{ planet.description }}</p>
+    </div>
+    <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">행성 개설자</p>
+    {% for account in accounts %}
+      <div>
+        {% if account.admin_level == 3 %}
+          <a href="{% url 'planets:planet_profile' planet_name=planet.name nickname=account.nickname %}" class="flex flex-row pl-5 py-2 my-3 rounded-lg bg-[#282c37] gap-4 relative hover-grow hover-bg">
+            {% if account.profile_image %}
+              <img src="{{ account.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+            {% else %}
+              <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+            {% endif %}
+            <div>
+              <p>{{ account.nickname }}</p>
+              <p class="text-slate-400">관리자</p>
+              <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ planet.created_at|date:'m d, Y' }}</p>
+            </div>
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="flex flex-row text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">
+      {% if user.admin_level == 2 or user.admin_level == 3 %}
+        <a href="{% url 'planets:planet_admin' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 ml-auto text-base text-center rounded-md">행성 관리</a>
+      {% endif %} 
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  var requestuser = "{{ request.user }}";
+  var requestuser_nickname= "{{ user.nickname }}";
+  
+</script>
+{% endblock script %}

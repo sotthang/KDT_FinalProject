@@ -1,0 +1,14 @@
+.planet-create-form {
+  margin-bottom: 1.5rem;
+  border-radius: 0.25rem;
+  border-color: rgb(209 213 219);
+}
+
+.planet-create-form:focus {
+  border-color: #ffd951;
+  --tw-ring-color: #ffd951;
+}
+
+.planet-create-btn:hover {
+  background-color: #ffd951;
+}

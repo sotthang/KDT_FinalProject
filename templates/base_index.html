@@ -1,0 +1,533 @@
+<!doctype html>
+{% load static %}
+{% load tailwind_filters %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock title %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="{% static 'css/base_index.css' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">  {% block head %}{% endblock head %}
+
+  <style>
+    {% block style %}
+    {% endblock style %}
+  </style>
+</head>
+
+<body class="bg-red">
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'info' %}
+          Swal.fire({
+            icon: 'success',
+            title: 'Good job!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    
+      // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'warning' %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    </script>
+  {% endfor %}
+{% endif %}
+
+  <!-- nav 바, md:hidden -->
+  <nav class="sticky top-0 w-full z-[1] lg:hidden">
+    <div class="flex justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
+      <a class="mt-3" href="{% url 'planets:main' %}">
+        <img type="button" style="height:30px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+      </a>      
+      <!-- Modal toggle -->
+      <div class="ms-3 p-1">
+        <button data-collapse-toggle="navbar-hamburger" type="button" class="inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
+          <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <!-- main content bar -->
+  <div class="sm:hidden w-full flex planet-main_bar bg-[#191b22] text-[#bcbdbf] py-2 gap-20 z-[10]">
+    <div class="flex w-full ">
+      <div class="w-1/4 text-xs font-semibold justify-center planet-main_bar-list hover-grow-fast"><a href="{% url 'planets:index' planet.name %}">Posts</a></div>
+      <div class="w-1/4 text-xs font-semibold justify-center planet-main_bar-list hover-grow-fast"><a href="{% url 'planets:tags_list' planet.name %}">Hashtags</a></div>
+      <div class="w-1/4 text-xs font-semibold justify-center planet-main_bar-list hover-grow-fast"><a href="{% url 'planets:index_list' planet.name %}">MyPlanets</a></div>
+      <div class="w-1/4 text-xs font-semibold justify-center planet-main_bar-list hover-grow-fast"><a href="{% url 'planets:planet_introduction' planet.name %}">Details</a></div>
+    </div>
+  </div>
+
+  <!-- 문제 -->
+  <div class="bg-[#282c37] flex-row items-center justify-between mx-auto ">
+    <div class="hidden border-b-1 border-[#393f4f] w-full" id="navbar-hamburger">
+      <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-1 border-[#393f4f]">
+        <h2 id="accordion-collapse-heading-5">
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-5" aria-expanded="false" aria-controls="accordion-collapse-body-5">
+            <span class="text-white">페이지로 이동</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-5" class="hidden" aria-labelledby="accordion-collapse-heading-5">
+          <div class="p-3 text-sm">
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'planets:main' %}" class="mb-5 text-white">Home</a>
+            </p>
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'planets:planet_list' %}" class="text-white">행성 리스트</a>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
+            <a href="{% url 'accounts:services' %}" class="text-white">service 소개</a>
+          </button>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
+            <a href="{% url 'accounts:membership' %}" class="text-white">멤버십 가입</a>
+          </button>
+        </div>
+
+        <h2 id="accordion-collapse-heading-6">
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-6" aria-expanded="false" aria-controls="accordion-collapse-body-6">
+            <span class="text-white">계정 관리</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
+          <div class="p-3 text-sm">
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
+            </p>
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'accounts:profile_update' %}" class="text-white">회원정보 수정</a>
+            </p>
+            <p>
+              <form action="{% url 'accounts:logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="hover-grow-fast">로그아웃</button>
+              </form>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- nav 바 아래, sm:hidden -->
+  <div class="w-full text-[#d9e1e8] bg-[#191b22] sm:hidden">
+    <div class="flex flex-col ">
+      <!-- 위젯 Accordion 에 숨기기 -->
+      <div id="accordion-flush" data-accordion="collapse" data-active-classes="text-[#bcbdbf]" data-inactive-classes="text-[#bcbdbf]">
+        <h2 id="accordion-flush-heading-1">
+          <button type="button" class="flex items-center justify-between w-full text-2xs text-left text-[#bcbdbf]" data-accordion-target="#accordion-flush-body-1" aria-expanded="false" aria-controls="accordion-flush-body-1">
+            <p class="ms-auto">Widget</p>
+            <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
+          <div class="py-5 border-b-1 border-[#393f4f]">
+            <div class="flex flex-row justify-center items-center gap-6 ">
+              <div class="relative text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 h-32 w-32 min-w-30 m-1 p-3 rounded-lg ">
+                <div class="weather_icon text-right"></div>
+                <div class="weather_description absolute top-10 right-3"></div>
+                <div class="flex text-2xs absolute font-bold bottom-9 left-0">
+                  <div class="temp_min text-blue-700"></div>/ 
+                  <div class="temp_max text-red-700"></div>
+                </div>
+                <div class="absolute bottom-3 left-2">
+                  <div class="current_temp" style="font-size:30px;"></div>
+                </div>
+              </div>
+
+              
+              <!-- 모바일환경 위젯 -->
+              <div class="relative bg-yellow-100 h-32 w-56 justify-center items-center m-2 p-3 rounded-md text-black">
+                <span class="bg-yellow-400 w-full absolute top-0 right-0 left-0 rounded-t-md">ㅤ</span>
+                <div id="index-memo">
+                  {% if memo %}
+                  <div id="memo">
+                    <div id="memo-content" class="ml-3 mt-3" style="word-break: break-all; max-width: 90%; overflow: auto; max-height: 4.5em;">
+                      {{ memo.memo }}
+                    </div>
+                    <form id="update-memo-form" data-planet-name="{{ planet.name }}">
+                      <button class="absolute bottom-2 right-2" id="update-memo-button" data-planet-name="{{ planet.name }}"><span class="material-symbols-outlined">
+                        edit_note
+                        </span></button>
+                    </form>
+                  </div>
+                  {% else %}
+                    <form id="create-memo-form" data-planet-name="{{ planet.name }}">
+                      {{ memoform }}
+                      <button class="absolute bottom-2 right-2" id="create-memo-button"><span class="material-symbols-outlined">
+                        edit
+                        </span></button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-center items-center bg-[#191b22]">
+    <!-- 좌측 사이드 바, sm:block -->
+    <div class="sticky top-0 max-w-[280px] mb-auto text-[#d9e1e8] hidden sm:block">
+      <div class="flex flex-row">
+        <div class="w-full">
+          <div class="flex flex-row">
+            <img src="{% if user.profile_image%}{{ user.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="no_image" class="w-1/6 h-1/6 m-5">
+            <div class="flex flex-col">
+              <p class="mt-5 text-sm"><a href="{% url 'planets:planet_profile' planet.name user.nickname %}">{{ user.nickname }}</a></p>
+              <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'planets:planet_profile_update' planet.name user.nickname %}">Edit profile</a></p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center items-center">
+          <div class="relative text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 h-36 w-36 m-5 p-3 rounded-lg ">
+            <div class="weather_icon text-right"></div>
+            <div class="weather_description absolute top-10 right-3"></div>
+            <div class="flex text-xs absolute font-bold bottom-10 left-0">
+              <div class="temp_min text-blue-700"></div>/ 
+              <div class="temp_max text-red-700"></div>
+            </div>
+            <div class="absolute bottom-3 left-2">
+              <div class="current_temp" style="font-size:36px;"></div>
+            </div>
+          </div>
+
+          <!-- 웹환경 위젯 -->
+          <div class="relative bg-yellow-100 h-36 w-36 justify-center items-center m-5 p-3 rounded-md text-black text-sm">
+            <span class="bg-yellow-400 w-full absolute top-0 right-0 left-0 rounded-t-md">ㅤ</span>
+            <div id="index-memo">
+              {% if memo %}
+              <div id="memo">
+                <div id="memo-content" class="mt-3" style="word-break: break-all; max-width: 100%; overflow: auto; max-height: 4.5em;">
+                  {{ memo.memo }}
+                </div>
+                <form id="update-memo-form" data-planet-name="{{ planet.name }}">
+                  <button class="absolute bottom-2 right-2" id="update-memo-button" data-planet-name="{{ planet.name }}"><span class="material-symbols-outlined">
+                    edit_note
+                    </span></button>
+                </form>
+              </div>
+              {% else %}
+                <form id="create-memo-form" data-planet-name="{{ planet.name }}">
+                  {{ memoform }}
+                  <button class="absolute bottom-2 right-2" id="create-memo-button"><span class="material-symbols-outlined">
+                    edit
+                    </span></button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="fixed bottom-[2%] p-5 mt-20 me-auto hidden sm:block">
+        <div class='ms-auto'>
+          <p class="text-sm text-[#bcbdbf]">Creators of Catsmos:</p>
+          <p class="mt-1 text-2xs lg:text-xs text-[#bcbdbf]">
+            FE: <a href="https://github.com/ParkJiHwan22">박지환</a>
+            <a href="https://github.com/Pysonny">최계수</a>
+          </p>
+          <p class="text-2xs lg:text-xs text-[#bcbdbf]">
+            BE: <a href="https://github.com/sotthang">소현섭</a>
+            <a href="https://github.com/kwonjh0825">권준혁</a>
+            <a href="https://github.com/arrmadillo">이수한</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- content -->
+
+    <div class="min-h-[1000px] sm:max-w-[700px] lg:max-w-[540px] bg-[#191b22] w-full text-white bg-color">
+      <div class="mt-3">
+        <form action="{% url 'planets:post_search' planet.name %}" class="rounded-md mx-auto bg-[#282c37] h-10 justify-center items-center text-white m-3 p-2">
+          <div class="flex">
+            <input type="text" class="text-sm text-[#bcbdbf] p-1 rounded-lg w-10/12 bg-transparent border-0" placeholder="Search" name="keyword">
+            <button type="submit" class="w-1/6 flex items-center justify-end bg-transparent border border-transparent rounded-lg text-gray-300 hover:text-gray-400 focus:outline-none focus:border-gray-700">
+              <span class="material-symbols-outlined">
+                search
+                </span>
+              </button>
+          </div>
+        </form>
+        <div class="hidden sm:flex flex-row w-full bg-[#191b22] text-center text-[#bcbdbf] p-3">
+          <p class="w-1/4 hover-grow-fast"><a href="{% url 'planets:index' planet.name %}">Posts</a></p>
+          <p class="w-1/4 hover-grow-fast"><a href="{% url 'planets:tags_list' planet.name %}">Hashtags</a></p>
+          <p class="w-1/4 hover-grow-fast"><a href="{% url 'planets:index_list' planet.name %}">MyPlanets</a></p>
+          <p class="w-1/4 hover-grow-fast"><a href="{% url 'planets:planet_introduction' planet.name %}">Details</a></p>
+        </div>
+      </div>
+
+      <div class="mb-auto " style="overflow-y: auto;">
+        <!-- Main modal -->
+        <div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-[#282c37] rounded-lg shadow">
+              <!-- Modal header -->
+              <div class="flex items-start justify-between p-4 bg-[#282c37] border-b border-yellow-300 rounded-t">
+                <h3 class="text-lg mt-1 font-semibold text-white">
+                  게시글 작성하기
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="defaultModal">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <!-- Modal body -->
+              <div class="p-8 space-y-6">
+                <form id="post-form" data-planet-name="{{ planet.name }}">
+                  {% csrf_token %}
+
+                  <div class="w-full mb-5">
+                    <label for="id_content" class="block text-base text-slate-300 mb-2">내용</label>
+
+                    {{ postform.content }}
+                  </div>
+                  <img src="{% static 'img/vote.png' %}" class="h-16 w-16 my-3" alt="투표" id="vote-toggle">
+                  <label class="block text-base text-slate-300 mb-2">투표 주제</label>
+                  <div class="w-full mb-5" id="vote-topics-container" style="display: none;">
+                    
+                    <button id="plus-button">+</button>
+                    <div id="vote-topics">
+                      <div class="vote-topic-input">
+                        {{ votetopicform.title }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-row">
+                    <div>
+                      <label for="id_image" class="block text-base text-slate-300 mb-2"></label>
+                      {{ postform.image }}
+                    </div>
+                    <div>
+                      <label for="id_tags" class="block text-base text-slate-300 mb-2">태그</label>
+                      {{ postform.tags }}
+                    </div>
+                  </div>
+                  <button data-modal-hide="defaultModal" type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
+                    <p>게시글 작성</p>
+                  </button>
+                </form>
+              </div>              
+            </div>
+          </div>
+        </div>
+
+        {% block content %}
+        {% endblock content %}
+      </div>
+      
+      <!-- footer -->
+      <footer class="sm:hidden h-full mt-28 border-t-2 border-[#393f4f]">
+        <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+          <div class="md:flex md:justify-between">
+            <div class="mb-6 md:mb-0">
+              <a href="#" class="flex items-center mb-10">
+                <img src="/static/img/catsmos_logo.png" alt="logo" class="w-40 mr-3">
+              </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+              <div>
+                <h2 class="mb-4 text-sm text-white uppercase">◽ Front-end</h2>
+                <ul class="text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="https://github.com/ParkJiHwan22" class="hover:underline ms-2">박지환</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Pysonny" class="hover:underline ms-2">최계수</a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="mb-4 text-sm font-semibold text-white uppercase">◽ Back-end</h2>
+                <ul class="text-gray-400 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="https://github.com/sotthang" class="hover:underline ms-2">소현섭</a>
+                  </li>
+                  <li class="mb-4">
+                    <a href="https://github.com/kwonjh0825" class="hover:underline ms-2">권준혁</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/arrmadillo" class="hover:underline ms-2">이수한</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:hidden my-8 py-2 border-t-2 border-[#393f4f]">
+            <span class="text-sm text-gray-500 text-center">© 2023 Catsmos™. All Rights Reserved.
+            </span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- 우측 side 바, md:block -->
+    <nav class="sticky top-0 mb-auto w-full z-[1] max-w-[280px] hidden lg:block">
+      <div class="border-b-1 border-[#393f4f] text-[#ffd951] font-bold w-full flex justify-center">
+        <a class="py-5" href="{% url 'planets:main' %}">
+          <img class="mt-1" type="button" style="width:200px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+        </a>
+      </div>
+      
+      <!-- Modal toggle -->
+      <div class='ms-5'>
+        <button id="post-btn" data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
+          게시글 작성하기
+        </button>
+      </div>
+
+      <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-1 border-[#393f4f]">
+        <h2 id="accordion-collapse-heading-2">
+          <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2">
+            <span class="text-white">페이지로 이동</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
+          <div class="p-5">
+            <p class="mb-5 hover-grow-fast">
+              <a href="{% url 'planets:main' %}" class="mb-5 text-white">Home</a>
+            </p>
+            <p class="mb-5 hover-grow-fast">
+              <a href="{% url 'planets:planet_list' %}" class="mb-5 text-white">행성 리스트</a>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center hover-grow-fast justify-between w-full p-5 font-medium text-left text-white">
+            <a href="{% url 'accounts:services' %}" class="text-white">서비스 소개</a>
+          </button>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center hover-grow-fast justify-between w-full p-5 font-medium text-left text-white">
+            <a href="{% url 'accounts:membership' %}" class="text-white">멤버쉽 가입</a>
+          </button>
+        </div>
+
+        <h2 id="accordion-collapse-heading-3">
+          <button type="button" class="flex items-center hover-grow-fast justify-between w-full p-5 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
+            <span class="text-white">계정 관리</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
+          <div class="p-5">
+            <p class="mb-5 hover-grow-fast">
+              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
+            </p>
+
+            <p class="mb-5 hover-grow-fast">
+              <a href="{% url 'accounts:profile_update' %}" class="text-white">회원정보 수정</a>
+            </p>
+              <form action="{% url 'accounts:logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="block hover-grow-fast">로그아웃</button>
+              </form>
+            </p>
+          </div>
+        </div>
+      <div>
+
+      <div class="flex flex-col">
+        <div class="container mx-auto max-w-4xl my-8">
+          <div class="my-4 mx-auto w-[80%] border-t-2 border-[#393f4f]">
+            {% if planet.image %}
+              <img src="{{ planet.image.url }}" alt="image" class="inline-block rounded-md" width="100%" height="50%">
+            {% else %}
+              <img src="{% static 'img/no_planet_img.png' %}" alt="no_image" class="inline-block rounded-md" width="100%" height="50%">
+            {% endif %}
+            <div class="flex flex-row justify-between">
+              <p class="text-xl pt-5 mb-2">{{ planet.name }}</p>
+              {% if user.star %}
+              <div class="flex pt-5 pe-2">
+                <div>
+                  <button>
+                    <i id="star" class="fa-solid fa-star fa-lg hover-grow" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i>
+                  </button>
+                </div>
+              </div>
+              {% else %}
+                <div class="flex p-5">
+                  <div>
+                    <button><i id="star" class="fa-regular fa-star fa-lg" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i></button>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div>
+              <p class="text-base pt-5 mb-5 border-t-2 border-[#393f4f]">행성 소개</p> <!-- Planet lists -->
+              <p class="text-sm">{{ planet.description }}</p>
+            </div>
+            <div class="my-4 mx-auto border-t-2 border-[#393f4f]">
+              <p class='text-xs text-[#bcbdbf] mt-2'>행성 개설일 {{ planet.created_at | date:"Y. n. j." }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+  </div>
+  <div data-tooltip-target="tooltip-create" class="fixed right-20 bottom-3 group hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 bg-yellow-300 rounded-lg" style="z-index: 999;">
+    <button id="post-btn" data-modal-target="defaultModal" data-modal-toggle="defaultModal" type="button" class="flex items-center justify-center ml-auto text-white  w-12 h-12  focus:outline-none ">
+        <svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+    </button>
+    <div id="tooltip-create" role="tooltip" class="whitespace-nowrap absolute z-10 invisible inline-block px-2.5 py-1.5 text-sm font-medium text-white transition-opacity duration-300 bg-yellow-500 rounded-lg shadow-sm opacity-0 tooltip ">
+      게시글 작성
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+  </div>
+  <div onclick="scrollTopFixed()" data-tooltip-target="tooltip-top" class="fixed right-5 bottom-3 group hover:bg-blue-500 focus:ring-4 focus:ring-blue-500 bg-blue-300 rounded-lg" style="z-index: 999;">
+    <button id="post-btn" type="button" class="flex items-center justify-center ml-auto text-white  w-12 h-12  focus:outline-none ">
+        <span class="material-symbols-outlined text-4xl font-bold">
+          arrow_upward
+          </span>
+    </button>
+    <div id="tooltip-top" role="tooltip" class="whitespace-nowrap absolute z-10 invisible inline-block px-2.5 py-1.5 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip ">
+      상단으로 가기
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+  </div>
+</body>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+<script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="{% static 'js/base_index.js' %}"></script>
+
+{% block script %}
+
+{% endblock script %}
+</html>

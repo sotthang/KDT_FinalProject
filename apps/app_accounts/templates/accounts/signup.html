@@ -1,0 +1,265 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+<div class="ml-2 pb-14">
+	<ol class="flex w-full">
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-yellow-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-yellow-800 lg:w-6 lg:h-6 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-yellow-400">이용약관</span>
+		</li>
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-yellow-800 lg:w-6 lg:h-6 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-yellow-400">회원가입</span>
+		</li>
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-gray-100 lg:w-6 lg:h-6 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-gray-400">가입 인증</span>
+		</li>
+		<li class="relative flex items-center w-full">
+			<span class="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-gray-100 lg:w-6 lg:h-6 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-gray-400">가입 완료</span>
+		</li>
+	</ol>
+</div>
+
+<div class="container mx-auto flex justify-center h-screen">
+  <div class="w-full">
+    <hr class="border-t-2 border-yellow-400">
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="grid mt-5">
+        <!-- id -->
+        <div class="relative z-0 w-full group">
+          <input type="text" id="username" name="username" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+          <label for="username" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">ID</label>
+          <small id="usernameMessage" class="pt-2 text-xs text-gray-400">5자 이상이어야 합니다</small>
+        </div>
+        <!-- email -->
+        <div class="relative z-0 w-full mt-3 group">
+          <input type="text" id="email" name="email" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+          <label for="email" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">E-mail</label>
+          <small id="emailMessage" class="pt-2 text-xs text-gray-400">이메일 양식으로 작성해야 합니다</small>
+        </div>
+
+        <div class="flex gap-5 mt-3">
+          <div class="relative z-0 w-full group">
+            <!-- last_name -->
+            <input type="text" id="last_name" name="last_name" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="last_name" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last_name</label>
+          </div>
+          <div class="relative z-0 w-full group">
+            <!-- first_name -->
+            <input type="text" id="first_name" name="first_name" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="first_name" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First_name</label>
+          </div>
+        </div>
+        <div class="flex gap-5 mt-5">
+          <div class="relative z-0 w-full group">
+            <!-- password1 -->
+            <input type="password" id="password1" name="password1" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="password1" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+            <small id="password1Message" class="text-xs text-gray-400">8자 이상,16자 이하여야 합니다</small>
+          </div>
+          <div class="relative z-0 w-full group">
+            <!-- password2 -->
+            <input type="password" id="password2" name="password2" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="password2" class="peer-focus:font-medium absolute text-sm text-gray-100 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm password</label>
+            <small id="password2Message" class="text-xs text-gray-400"></small>
+          </div>
+        </div>
+        <!-- checkbox -->
+        <div class="flex items-center my-4 ml-2">
+        </div>
+        <!-- 버튼 -->
+        <div class="grid mt-3">
+          <button id="submitBtn" type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">제출하기</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+  // 아이디
+  const userId = document.querySelector('#username');
+  // 이메일
+  const Email = document.querySelector('#email');
+  // 성
+  const Last_name = document.querySelector('#last_name');
+  // 이름
+  const First_name = document.querySelector('#first_name');
+  // 비밀번호
+  const pw = document.querySelector('#password1');
+  // 비밀번호 확인
+  const r_pw = document.querySelector('#password2');
+
+
+  let username = '';
+  let email = '';
+  let lastname = '';
+  let firstname = '';
+  let password = '';
+  let repassword = '';
+
+
+  userId.addEventListener('input', () => {
+    const input_id = userId.value;
+    const message = document.querySelector('#usernameMessage');
+    const userinput = document.querySelector('#username');
+
+    if (input_id.trim().length >= 5) {
+      userinput.classList.remove('border-red-300');
+      userinput.classList.remove('border-gray-300');
+      userinput.classList.add('border-green-300');
+      message.textContent = '유효한 아이디 양식입니다.';
+      username = input_id;
+    } else {
+      userinput.classList.remove('border-green-300');
+      userinput.classList.add('border-red-300');
+      if (input_id.trim() === '') {
+        userinput.classList.remove('border-green-300');
+        userinput.classList.remove('border-red-300');
+        message.textContent = '5자 이상이어야 합니다.';
+      } else {
+        message.textContent = '5자 이상이어야 합니다.';
+      }
+      username = '';
+    }
+   });
+   
+  Email.addEventListener('input', () => {
+    const input_email = Email.value;
+    const message = document.querySelector('#emailMessage');
+    const emailinput = document.querySelector('#email');
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    if (input_email.trim() === '') {
+      emailinput.classList.remove('border-red-300');
+      emailinput.classList.remove('border-green-300');
+      message.textContent = '이메일 양식으로 작성해야 합니다';
+      email = '';
+    } else if (emailRegex.test(input_email)) {
+      emailinput.classList.remove('border-red-300');
+      emailinput.classList.add('border-green-300');
+      message.textContent = '유효한 이메일 양식입니다.';
+      email = input_email;
+    } else {
+      emailinput.classList.remove('border-green-300');
+      emailinput.classList.add('border-red-300');
+      message.textContent = '이메일 양식을 지켜야 합니다.';
+      email = '';
+    }
+    });
+
+  Last_name.addEventListener('input', () => {
+    const input_lastname = Last_name.value;
+    const lastnameinput = document.querySelector('#last_name');
+
+    if (input_lastname.length > 0) {
+      lastnameinput.classList.add('border-green-300');
+      lastname = input_lastname;
+    } else {
+      lastnameinput.classList.remove('border-green-300');
+      lastname = '';
+    }
+    });
+
+    First_name.addEventListener('input', () => {
+    const input_firstname = First_name.value;
+    const firstnameinput = document.querySelector('#first_name');
+
+    if (input_firstname.length > 0) {
+      firstnameinput.classList.add('border-green-300');
+      firstname = input_firstname;
+    } else {
+      firstnameinput.classList.remove('border-green-300');
+      firstname = '';
+    }
+    });
+
+  pw.addEventListener('input', () => {
+    const input_pw = pw.value;
+    const message = document.querySelector('#password1Message');
+    const pw1input = document.querySelector('#password1');
+
+    if (input_pw.length >= 8 && input_pw.length <= 16) {
+      pw1input.classList.remove('border-red-300');
+      pw1input.classList.add('border-green-300');
+      message.textContent = '유효한 비밀번호입니다.';
+      password = input_pw;
+    } else {
+      pw1input.classList.remove('border-green-300');
+      pw1input.classList.add('border-red-300');
+      if (input_pw.trim() === '') {
+        pw1input.classList.remove('border-green-300');
+        pw1input.classList.remove('border-red-300');
+        message.textContent = '8자 이상,16자 이하여야 합니다';
+      } else {
+        message.textContent = '유효하지 않은 비밀번호입니다.';
+      }
+      password = '';
+    }
+  });
+
+  r_pw.addEventListener('input', () => {
+    const input_rpw = r_pw.value;
+    const r_message = document.querySelector('#password2Message');
+    const pw2input = document.querySelector('#password2');
+
+    if (input_rpw === password && password.length !== 0) {
+      pw2input.classList.remove('border-red-300');
+      pw2input.classList.add('border-green-300');
+      r_message.textContent = '동일한 비밀번호입니다.';
+      repassword = input_rpw;
+    } else {
+      pw2input.classList.remove('border-green-300');
+      pw2input.classList.add('border-red-300');
+      if (password.length === 0) {
+        pw1input.classList.remove('border-green-300');
+        pw1input.classList.remove('border-red-300');
+      }
+      r_message.textContent = '동일하지 않은 비밀번호입니다.';
+      repassword = '';
+    }
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (username === '' || email === '' || lastname === '' || firstname === '' || password === '' || repassword === '') {
+      Swal.fire({
+        icon: 'error',
+        title: '죄송합니다',
+        text: '양식을 지켜서 다시 작성해주세요',
+      });
+    } else {
+      Swal.fire({
+        title: 'Loading...',
+        text: '잠시 기다려주세요',
+        allowOutsideClick: false,
+        didOpen: function () {
+          Swal.showLoading();
+        }
+      });
+    }
+  });
+</script>
+{% endblock script %}

@@ -1,0 +1,117 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+      <span class="material-symbols-outlined">
+          chevron_left
+      </span>
+      Back
+  </a>
+</div>
+<div class="container mx-auto flex justify-center h-screen">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">게시글 신고 관리</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="mt-5 grid">
+      <p class="text-2xl border-b-2 border-gray-400">게시물 신고 현황</p>
+      {% for report_count in post_reports_count %}
+      <div id="report-form-{{report_count.post}}" class="col pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] flex gap-4 relative">
+        <div>
+          <p>No.{{report_count.post}} / 신고 수 : {{report_count.pk__count}}</p>
+          <div class="flex">
+            <p>신고 내용 : </p>
+            {% for report in post_reports %}
+              {% if report.post.pk == report_count.post %}
+                <p>{{report.content}}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <form class="delete-post-form" data-post-pk="{{report_count.post}}" data-planet-name="{{planet.name}}">
+          {% csrf_token %}
+          <button class="absolute right-2 top-2 text-slate-400 text-xs" type="submit"><span class="material-symbols-outlined">
+          delete
+          </span></button>
+        </form>
+      </div>
+    {% empty %}
+    <div class="col pl-5 py-5 my-3 rounded-lg ">
+      <p>신고된 내역이 없습니다.</p>
+    </div>
+    {% endfor %}
+    </div>
+
+    <div class="mt-5 grid">
+      <p class="text-2xl border-b-2 border-gray-400">댓글 신고 현황</p>
+      <div id="report-comment-list">
+        {% for report_count in comment_reports_count %}
+          <div id="report-commentform-{{report_count.comment}}" class="col pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] flex gap-4 relative">
+            <div>
+              <p>No.{{report_count.comment}} / 신고 수: {{report_count.pk__count}}</p>
+              <div class="flex">
+                <p>신고 내용 : </p>
+                {% for report in comment_reports %}
+                  {% if report.comment.pk == report_count.comment %}
+                    <p>{{report.content}}</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <form class="delete-comment-form" data-comment-pk="{{report_count.comment}}" data-planet-name="{{planet.name}}">
+              {% csrf_token %}
+              <button class="absolute right-2 top-2 text-slate-400 text-xs" type="submit"><span class="material-symbols-outlined">
+              delete
+              </span></button>
+            </form>
+          </div>
+        {% empty %}
+        <div class="col pl-5 py-5 my-3 rounded-lg ">
+          <p>신고된 내역이 없습니다.</p>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+
+    <div class="mt-5 grid">
+      <p class="text-2xl border-b-2 border-gray-400">대댓글 신고 현황</p>
+      <div id="report-recomment-list">
+        {% for report_count in recomment_reports_count %}
+          <div id="report-recommentform-{{report_count.recomment}}" class="col pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] flex gap-4 relative">
+            <div>
+              <p>대댓글 번호: {{report_count.recomment}}, 신고 수: {{report_count.pk__count}}</p>
+              <div class="flex">
+                <p>신고 내용 : </p>
+                {% for report in recomment_reports %}
+                  {% if report.recomment.pk == report_count.recomment %}
+                    <p>{{report.content}}</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <form class="delete-recomment-form" data-recomment-pk="{{report_count.recomment}}" data-planet-name="{{planet.name}}">
+              {% csrf_token %}
+              <button class="absolute right-2 top-2 text-slate-400 text-xs" type="submit"><span class="material-symbols-outlined">
+                delete
+              </span></button>
+            </form>
+          </div>
+        {% empty %}
+        <div class="col pl-5 py-5 my-3 rounded-lg ">
+          <p>신고된 내역이 없습니다.</p>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+-----
+
+{% endblock content %}
+{% block script %}
+<script src="{% static 'js/admin_report.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock script %}

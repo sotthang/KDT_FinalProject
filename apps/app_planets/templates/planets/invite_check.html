@@ -1,0 +1,23 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="flex justify-center text-lg">
+      <div class="planet-list-box w-full  m-3 border border-white rounded-lg shadow-lg">
+        <div class="p-3">
+          <img class="planet-list-img mb-5" src="{% if planet.image %}{{ planet.image.url }}{% else %}{% static 'img/no_planet_img.png' %}{% endif %}" alt="image" style="width: 500px;">
+          <div class="planet-list-text">
+            <div class="flex justify-between">
+              <p class="text-[#999999]">{{ planet.is_public }}</p>
+              <p class="text-[#999999]">{{ planet.accountbyplanet_set.all.count }}/{{ planet.maximum_capacity }}명</p>
+            </div>
+            <p class="mb-2 pb-3 border-b border-gray-400">{{ planet.name }}</p>
+            <p id="description-{{ planet.id }}" class="text-sm min-h-[60px] mb-2 clamp-3-lines">{{ planet.description }}</p>
+          </div>
+          <div class=" grid mt-3">
+            <button class="bg-yellow-400 hover:bg-yellow-500  text-white font-bold py-1 px-4 rounded shadow"><a href="{% url 'planets:planet_contract' planet.name %}?invite_code={{invite_code}}">가입하기</a></button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}

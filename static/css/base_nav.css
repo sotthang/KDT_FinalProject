@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'LINESeedKR-Bd';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: 'LINESeedKR-Bd', 'serif';
+  color: aliceblue;
+
+}
+
+
+main {
+  width: 1280px;
+  padding: 0 1rem;
+}
+
+#wrapper{
+  height: auto;
+  min-height: 100%;
+  padding-bottom: 50px;
+
+}
+
+footer{
+  height: 40px;
+  position : relative;
+}
+
+

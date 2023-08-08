@@ -1,0 +1,141 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block content %}
+
+<div class="ml-2 pb-14">
+	<ol class="flex w-full">
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-yellow-800 lg:w-6 lg:h-6 dark:text-yellow-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-yellow-400">이용약관</span>
+		</li>
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-gray-100 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-gray-400">회원가입</span>
+		</li>
+		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-400 after:border-4 after:inline-block ">
+			<span class="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-gray-100 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-gray-400">가입 인증</span>
+		</li>
+		<li class="relative flex items-center w-full">
+			<span class="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full lg:h-12 lg:w-12 shrink-0">
+				<svg aria-hidden="true" class="w-5 h-5 text-gray-100 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+			</span>
+			<span class="text-center absolute text-xs transform translate-y-8 text-gray-400">가입 완료</span>
+		</li>
+	</ol>
+</div>
+
+<hr class="border-t-2 border-yellow-300">
+<div class="relative overflow-x-auto rounded-md">
+	<table class="w-full text-md text-left text-gray-300 ">
+		<tbody>
+			<tr class="border-b dark:border-gray-700">
+				<th scope="row" class="px-6 py-1 font-medium text-white whitespace-nowrap dark:text-white">
+					<div class="w-10 h-10 rounded-full bg-yellow-500 flex justify-center items-center">
+						<span class="text-white font-bold">1</span>
+					</div>
+				</th>
+				<td class="px-6 pt-4 ">
+					<p>이용자는 서비스를 이용함으로써 본 이용약관에 동의한 것으로 간주됩니다.</p>
+					<div class="text-right my-2">
+						<input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+						<label for="ck1">동의합니다</label>
+					</div>
+				</td>
+			</tr>
+			<tr class="border-b dark:border-gray-700">
+				<th scope="row" class="px-6 py-1 font-medium text-white whitespace-nowrap dark:text-white">
+					<div class="w-10 h-10 rounded-full bg-yellow-500 flex justify-center items-center">
+						<span class="text-white font-bold">2</span>
+					</div>
+				</th>
+				<td class="px-6 py-4">
+					<p>서비스 이용 중 발생하는 모든 활동의 책임은 이용자에게 있으며, 이용자는 법률과 윤리에 따라 서비스를 이용해야 합니다.</p>
+					<div class="text-right my-2">
+						<input id="ck2" type="checkbox" class="mr-2 order2_chks">
+						<label for="ck2">동의합니다</label>
+					</div>
+				</td>
+			</tr>
+			<tr class="">
+				<th scope="row" class="px-6 py-1 font-medium text-white whitespace-nowrap dark:text-white">
+					<div class="w-10 h-10 rounded-full bg-yellow-500 flex justify-center items-center">
+						<span class="text-white font-bold">3</span>
+					</div>
+				</th>
+				<td class="px-6 py-4">
+					<p>서비스의 이용은 개인정보 보호 정책에 따라 수집된 정보를 활용할 수 있음을 동의하는 것으로 간주됩니다.</p>
+					<div class="text-right my-2">
+						<input id="ck3" type="checkbox" class="mr-2 order2_chks">
+						<label for="ck3">동의합니다</label>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="my-8">
+	<div class="text-right">
+		<input type="checkbox" id="order2_chk" class="mr-2 ">
+	<label for="order2_chk">모든 이용약관에 동의합니다</label>
+	</div>
+</div>
+<div class="btnArea grid">
+	<button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">다음으로</button>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+	function redirectToSignupPage() {
+		window.location.href = "{% url 'accounts:signup' %}";
+	  }
+	$(document).ready(function(){
+
+		//전체 체크 클릭 시, 나머지 체크 
+		$("#order2_chk").click(function(){
+		var order2Chk=$("#order2_chk").prop("checked");
+			if(order2Chk){
+				$(".order2_chks").prop("checked",true);
+				$(".btnArea button").addClass("hover:bg-yellow-500").css({"backgroundColor":"#facc15","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}
+			else{
+				$(".order2_chks").prop("checked",false);
+				$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			}
+		});
+
+		// 모든 체크박스를 클릭하면 버튼 활성화시키기
+		$('.order2_chks').click(function(){
+			var tmpp = $(this).prop('checked'); 
+			
+			//자식 체크 전체 체크시, 부모 체크박스 체크 됨
+			var tt = $(".order2_chks").length;
+			var ss = $(".order2_chks:checked").length;			
+			
+			// 체크박스가 모두 선택되었을 때 상위 체크박스 선택되도록 설정
+			if(tt == ss){
+				$("#order2_chk").prop("checked",true);
+				$(".btnArea button").addClass("hover:bg-yellow-500").css({"backgroundColor":"#facc15","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+
+			}else{
+				$("#order2_chk").prop("checked",false);
+				$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+
+			}
+		});
+	});
+</script>
+{% endblock script %}

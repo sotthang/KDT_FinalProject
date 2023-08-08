@@ -1,0 +1,27 @@
+{% extends 'base_index.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block content %}
+  <!-- 신고 -->
+  <form action="{% url 'planets:report' planet.name category pk %}" method="POST" class="m-3">
+    {% csrf_token %}
+    <p class="text-xl text-center mb-3">{{category}} 신고</p>
+    <hr>
+    <div class="mt-3">
+      <p class="text-lg text-center">{{category}} 내용</p>
+      
+      <div class="m-3">{{reported.content}}</div>
+      <hr>
+    </div>
+    <div class="grid">
+      <p class="text-center m-3 text-lg">신고 내용</p>
+      <textarea type="text" rows="15" name="report_content" class="text-[#bcbdbf] rounded-lg"></textarea>
+      <input type="submit" value="신고" class="m-3">
+    </div>
+  </form>
+{% endblock content %}

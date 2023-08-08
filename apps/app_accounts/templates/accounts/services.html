@@ -1,0 +1,73 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}
+Services
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class="container mx-auto px-4 max-w-[800px]">
+  <div class="py-12">
+    <h1 class="text-4xl font-bold mb-4">Catsmos만의</h1>
+    <h1 class="text-4xl font-bold mb-4">특별한 기능을 소개합니다!</h1>
+    <p class="text-lg mb-8">Dive into a world where communication takes a whole new turn. Explore, express and interact like never before.</p>
+    <hr class="mb-8">
+  </div>
+  <div class="grid gap-8">
+
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="w-full h-90 object-cover" src="{% static 'img/1_planet_profile.png' %}" alt="Voting System">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">폐쇄형 SNS</h5>
+          <p class="text-gray-400 text-base">Our closed SNS ensures a safe and secure environment to connect, ensuring your privacy is our utmost priority. You can control who you connect with and share your world with.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+          <img class="mx-auto w-1/2 object-cover" src="{% static 'img/1_profile.jpg' %}" alt="Planet Profiles">
+        
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">행성마다 따로 설정 가능한 Profiles</h5>
+          <p class="text-gray-400 text-base">With our unique planet profile feature, you can set different profiles for different planets, expressing your diverse facets in different circles.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="mx-auto w-3/4 object-cover" src="{% static 'img/1_widget.jpg' %}" alt="Voting System">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">위젯을 통한 사용자 편의성 제공</h5>
+          <p class="text-gray-400 text-base">Our platform offers a democratic space where you can vote for various features, hashtags and more within your planet. Be a part of the decision-making process and let your voice be heard.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="w-3/4 mx-auto object-cover" src="{% static 'img/1_vote.jpg' %}" alt="Voting System">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">투표, 해시태그와 같은 풍부한 기능</h5>
+          <p class="text-gray-400 text-base">Our platform offers a democratic space where you can vote for various features, hashtags and more within your planet. Be a part of the decision-making process and let your voice be heard.</p>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>   
+{% endblock content %}
+
+{% block script %}
+<script>
+</script>
+{% endblock script %}

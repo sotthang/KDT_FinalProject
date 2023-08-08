@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'LINESeedKR-Bd';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: 'LINESeedKR-Bd', 'serif';
+  color: aliceblue;
+}
+
+.side-bar {
+  max-width: 280px;
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+}
+
+.button-chatting {
+  border-radius: 0.3rem;
+}
+
+.button-chatting:hover {
+  border: 0.5px solid #ffd951;
+  background-color: #ffd951;
+}
+
+.vote {
+  width: 50px;
+  height: 50px;
+}
+
+.planet-main_bar {
+  border-top: solid 1px rgb(223 223 223);
+  border-bottom: solid 1px rgb(223 223 223);
+  background-color: #f5f5f5;
+  height: 60px;
+  align-items: center;
+  position: sticky;
+  top: 94px;
+}
+
+.planet-main_bar-list {
+  /* box-sizing: border-box;
+  border: 1px solid black; */
+  padding: 14px 15px 10px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.planet-main_bar-list:active {
+  border-bottom: 3px solid #ffd951;
+  z-index: 1;
+}
+
+.planet-main_bar-list:hover {
+  color: #ffd951;
+}
+
+.chatting-create-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.chatting-create-btn:hover {
+  background-color: #ffd951;
+}
+
+#dropdown-menu {
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(40, 44, 55);
+  top: 0;
+  left: 100%;
+}
+
+.my-svg:hover {
+  fill: #ffc800; /* Change color to yellow */
+  transform: scale(1.5); /* Scale it up */
+}
+
+.hover-grow:hover {
+  transform: scale(1.05);
+  transition: transform 0.1s ease-in-out;
+}
+
+.hover-grow-fast:hover {
+  transform: scale(1.05);
+}
+
+/* .hover-bg:hover {
+  background-color: #ffd951;
+} */
+
+#wrap {
+  /* calc() : 괄호 안의 식을 계산한 결과를 속성값으로 사용하게 해주는 함수 */
+  min-height: calc(100vh - 8rem); /* footer 높이를 빼준다. */
+}
+
+footer {
+  height: 8rem; /* footer 높이 */
+}
+
+.overflow-auto {
+  max-height: 100vh;
+  overflow: auto;
+}

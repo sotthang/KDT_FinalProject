@@ -1,0 +1,49 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+      <span class="material-symbols-outlined">
+          chevron_left
+      </span>
+      Back
+  </a>
+</div>
+<div class=" container mx-auto flex justify-center">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">이용약관</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="my-4">
+      <form action="{% url 'planets:planet_tos_admin' planet.name %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="terms-of-service">
+          <input type="hidden" id="num-terms" name="termsofservice_count" value="{{length}}">
+          <div id="term-fields-container">
+            {% for TOS in TOSs %}
+            <div class="my-5 flex gap-1 delete-term-btn">
+              <label class="flex items-center" for="term_content_{{forloop.counter}}">약관 :</label>
+              <input class="rounded-md text-black w-4/5" type="text" id="term_content_{{forloop.counter}}" name="term_content_{{forloop.counter}}" value="{{TOS.content}}">
+              <button class="my-auto justify-center flex items-center bg-red-400 rounded-lg delete-term-btn" style="width:30px; height:30px;" type="button" data-term-count="{{forloop.counter}}">X</button>
+              <br>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="grid my-2">
+            <button class="text-md bg-gray-500 hover:bg-gray-600 py-1 rounded-md" type="button" id="add-term-btn">약관 추가하기</button>
+          </div>
+        </div>
+        
+        <div class="grid mt-7">
+          <button type="submit" class="py-1 bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">수정하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/planet_tos_update.js' %}"></script>
+
+{% endblock content %}

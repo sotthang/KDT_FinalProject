@@ -1,0 +1,89 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block style %}
+.password-container{
+  position: relative;
+}
+.password-container input[type="password"],
+.password-container input[type="text"]{
+  width: 100%;
+  
+  box-sizing: border-box;
+}
+.fa-eye{
+  position: absolute;
+  top: 35%;
+  right: 4%;
+  cursor: pointer;
+  color: lightgray;
+}
+{% endblock style %}
+
+{% block content %}
+<div class="">
+  <div class="m-4">
+    <!-- 설명 -->
+    {% if login_failed %}
+    <div id="alert-border-2" class="flex p-4 mb-4 border-t-4 text-red-400 bg-gray-800 border-red-800" role="alert">
+      <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+      <div class="ml-3 text-sm font-medium">
+        ID 혹은 비밀번호가 다릅니다. <br> 확인하고 다시 로그인 해주세요.
+      </div>
+      <button type="button" class="ml-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 inline-flex h-8 w-8 bg-gray-800 text-red-400 hover:bg-gray-700"  data-dismiss-target="#alert-border-2" aria-label="Close">
+        <span class="sr-only">Dismiss</span>
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+      </button>
+    </div>
+    {% endif %}
+    <div class="text-center">
+      <p class="my-3 text-3xl font-bold">Welcome to Catsmos <br> Your Gateway to Feline Wonder!</p>
+      <p class="text-gray-400">Dive into the enchanting world of cats with Catsmos, where we celebrate everything feline. Discover captivating stories, adorable pictures, expert advice, and a community of passionate cat lovers. </p><br>
+    </div>
+
+    <!-- 로그인 폼 -->
+    <div class="form-login">
+      <form action="{% url 'accounts:login' %}" method="POST">
+        {% csrf_token %}
+        <div class="my-6">
+          <div class="relative z-0 w-full group">
+            <input type="text" id="username" name="username" class="block py-2.5 px-0 w-full text-sm text-white-900 bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="username" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">ID</label>
+          </div>
+          <div class="relative z-0 w-full group mt-5">
+            <input type="password" id="password" name="password" class="block py-2.5 px-0 w-full text-sm text-white-900 bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-yellow-500 focus:outline-none focus:ring-0 focus:border-yellow-600 peer" placeholder=" " required>
+            <label for="password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-yellow-600 peer-focus:dark:text-yellow-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+            <i class="fa-solid fa-eye absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer" id="togglePassword"></i>
+          </div>
+        </div>
+        <div class="grid mt-7">
+          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">로그인</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 도움 -->
+    <div class="me-5 my-3 text-gray-200 flex justify-end gap-x-7" style="font-size:12px">
+      <a href="{% url 'accounts:contract' %}">회원가입</a>
+      <a href="{% url 'accounts:find_id' %}">아이디 찾기</a>
+      <a href="{% url 'accounts:password_reset' %}">비밀번호 찾기</a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+  const passwordInput = document.querySelector("#password");
+  const eye = document.querySelector("#togglePassword");
+  eye.addEventListener("click", function(){
+    this.classList.toggle("fa-eye-slash");
+    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+  });
+</script>
+{% endblock script %}

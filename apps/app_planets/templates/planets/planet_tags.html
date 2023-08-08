@@ -1,0 +1,60 @@
+{% extends 'base_index.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% load tailwind_filters %}
+
+{% block title %}
+{{ planet.name }}
+{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/planet_tags.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="container mx-auto max-w-4xl my-8">
+  <div class="my-4 mx-auto w-[95%] border-b-2 border-[#393f4f]">
+    <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">최근 2주간 상위 5개 태그</p> <!-- Planet lists -->
+    {% for tag in tags %}
+      <div id="tag" class="border-b-2 border-[#393f4f]">
+        <div>
+          <a href="{% url 'planets:post_tag' planet.name tag %}">
+            <div class="text-base hover-grow-fast">
+              #{{ tag }}
+            </div>
+            <div class="text-xs text-[#bcbdbf]">
+              총 {{ tag.tag_count }}개의 게시글이 존재합니다
+            </div>
+          </a>
+        </div>
+        <div class="progress-bar">
+          <div class="progress text-center" style="width: {{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%;">{{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const progressBars = document.querySelectorAll('.progress');
+
+  progressBars.forEach(progress => {
+    const styleAttribute = progress.getAttribute('style');
+    const widthValue = styleAttribute.match(/width: (.*?);/)[1];
+
+    let t = 0;
+    const barAnimation = setInterval(() => {
+      progress.style.width = t + '%';
+      t++;
+      if (t > parseFloat(widthValue)) {
+          clearInterval(barAnimation);
+      }
+    }, 30);
+  });
+</script>
+
+{% endblock script %}

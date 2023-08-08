@@ -1,0 +1,29 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+Catsmos
+{% endblock title %}
+
+{% block content %}
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+    <span class="material-symbols-outlined">
+      chevron_left
+    </span>
+    Back
+  </a>
+</div>
+<div class="container mx-auto flex justify-center h-screen">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">아이디 찾기</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="my-4">
+      <div class="flex justify-center">
+        <p class="rounded-md bg-gray-700 w-full text-center py-5 px-3 my-5">입력하신 정보의 ID는 <span class="text-yellow-400"> {{user_found.username}} </span> 입니다.</p>
+      </div>
+      <div class="grid mt-5">
+        <a href="{% url 'accounts:login' %}" class="bg-yellow-400 hover:bg-yellow-500 text-center text-white font-bold py-2  rounded shadow">로그인</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
