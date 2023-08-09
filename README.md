@@ -1,6 +1,6 @@
 # Catsmos
 
-![logo](/static/img/main_logo.png){:width="200px"}
+![logo](/static/img/main_logo.png)
 
 Catsmos 는 사용자들이 서로의 생각과 순간을 공유할 수 있는 파이썬 기반의 소셜 네트워킹 플랫폼입니다.
 
@@ -35,12 +35,12 @@ Catsmos 를 설치하는 방법은 다음과 같습니다:
 
 ## 스크린샷
 
-![logo](/static/img/catsmos1.png){:width="200px"}
+![logo](/static/img/catsmos1.png)
 
-![logo](/static/img/catsmos2.png){:width="200px"}
+![logo](/static/img/catsmos2.png)
 
-![logo](/static/img/catsmos3.png){:width="200px"}
+![logo](/static/img/catsmos3.png)
 
-![logo](/static/img/catsmos4.png){:width="200px"}
+![logo](/static/img/catsmos4.png)
 
-![logo](/static/img/catsmos5.png){:width="200px"}
+![logo](/static/img/catsmos5.png)
