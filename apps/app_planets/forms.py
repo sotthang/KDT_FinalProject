@@ -60,16 +60,6 @@ class PlanetForm(forms.ModelForm):
         ].label = '<span class="text-white">행성 최대 인원</span>'
         self.fields["maximum_capacity"].help_text = ""
 
-        # labels = {
-        #     'name': '행성 이름',
-        #     'description': '행성 설명',
-        #     'category': '카테고리',
-        #     'is_public': '공개 여부',
-        #     'image': '행성 사진',
-        #     'maximum_capacity': '행성 최대 인원',
-        #     'need_confirm': '가입 승인 필요'
-        # }
-
     def clean_name(self):
         name = self.cleaned_data["name"]
         validate_inappropriate_words(name)
@@ -124,12 +114,6 @@ class PostForm(forms.ModelForm):
         ] = "bg-[#101013] text-white mt-1 block rounded-md"
         self.fields["tags"].widget.attrs["placeholder"] = " "
         self.fields["tags"].help_text = ""
-
-        # labels = {
-        #     'content': '내용',
-        #     'image': '사진',
-        #     'tags': '태그',
-        # }
 
     def clean_content(self):
         content = self.cleaned_data["content"]

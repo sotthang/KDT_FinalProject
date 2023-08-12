@@ -18,6 +18,8 @@ urlpatterns = [
         name="services",
     ),
     path("signup/", views.signup, name="signup"),
+    path("check_username/", views.check_username, name="check_username"),
+    path("check_email/", views.check_email, name="check_email"),
     path("password/", views.change_password, name="change_password"),
     path(
         "contract/",

@@ -127,6 +127,19 @@ Catsmos
     const message = document.querySelector('#usernameMessage');
     const userinput = document.querySelector('#username');
 
+    $.ajax({
+      url: '/accounts/check_username/',
+      type: 'GET',
+      data: {'username': input_id},
+      success: function(response) {
+        if (response.check) {
+          userinput.classList.remove('border-green-300');
+          userinput.classList.add('border-red-300');
+          message.textContent = '이미 존재하는 아이디입니다.';
+        }
+      }
+    });
+
     if (input_id.trim().length >= 5) {
       userinput.classList.remove('border-red-300');
       userinput.classList.remove('border-gray-300');
@@ -152,6 +165,19 @@ Catsmos
     const message = document.querySelector('#emailMessage');
     const emailinput = document.querySelector('#email');
     var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    $.ajax({
+      url: '/accounts/check_email/',
+      type: 'GET',
+      data: {'email': input_email},
+      success: function(response) {
+        if (response.check) {
+          emailinput.classList.remove('border-green-300');
+          emailinput.classList.add('border-red-300');
+          message.textContent = '이미 존재하는 이메일입니다.';
+        }
+      }
+    });
 
     if (input_email.trim() === '') {
       emailinput.classList.remove('border-red-300');

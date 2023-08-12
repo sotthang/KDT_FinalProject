@@ -1,6 +1,9 @@
+from django import forms
 from django.test import TestCase
 from .models import User, Accountbyplanet
-from apps.app_planets.models import Planet
+from .forms import AccountbyplanetForm
+from apps.app_planets.forms import validate_inappropriate_words
+from apps.app_planets.models import Planet, InappropriateWord
 
 # Create your tests here.
 
@@ -40,3 +43,27 @@ class UserandAccountbyplanetModelTest(TestCase):
     def test_nickname_label(self):
         field_label = self.accountbyplanet._meta.get_field("nickname").verbose_name
         self.assertEquals(field_label, "nickname")
+
+
+class AccountbyplanetFormTest(TestCase):
+    # 테스트 DB 생성
+    def setUp(self):
+        InappropriateWord.objects.create(word="존나")
+
+    # validate_inappropriate_words 적절 단어 테스트
+    def test_clean_nickname_valid(self):
+        form = AccountbyplanetForm(data={"nickname": "초코"})
+        self.assertTrue(form.is_valid())
+
+    # validate_inappropriate_words 부적절 단어 테스트
+    def test_clean_nickname_with_inappropriate_word(self):
+        form = AccountbyplanetForm(data={"nickname": "존나1"})
+        self.assertFalse(form.is_valid())
+        self.assertIn("nickname", form.errors)
+
+    # validate_inappropriate_words 부적절 단어 validation 테스트
+    def test_validate_inappropriate_words(self):
+        with self.assertRaises(forms.ValidationError) as context:
+            validate_inappropriate_words("존나1")
+        expected_error_message = "부적절한 단어 (존나) 이/가 포함되어 있습니다. 다시 작성해주세요."
+        self.assertEqual(str(context.exception.messages[0]), expected_error_message)
