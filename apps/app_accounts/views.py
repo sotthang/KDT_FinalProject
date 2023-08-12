@@ -18,6 +18,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.core import signing  # 암호화
 from django.utils.crypto import get_random_string  # 토큰
 from django.shortcuts import get_object_or_404
@@ -26,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
@@ -62,9 +63,10 @@ def login(request):
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
+        if not form.is_valid():
+            messages.error(request, "패스워드를 확인해주세요.")
+        else:
+            update_session_auth_hash(request, form.save())
             return redirect("planets:main")
     else:
         form = PasswordChangeForm(request.user)
@@ -108,6 +110,28 @@ def signup(request):
     return render(request, "accounts/signup.html", context)
 
 
+# username 중복 체크
+def check_username(request):
+    try:
+        User.objects.get(username=request.GET.get("username"))
+        check = True
+    except ObjectDoesNotExist:
+        check = False
+    response_data = {"check": check}
+    return JsonResponse(response_data)
+
+
+# email 중복 체크
+def check_email(request):
+    try:
+        User.objects.get(email=request.GET.get("email"))
+        check = True
+    except ObjectDoesNotExist:
+        check = False
+    response_data = {"check": check}
+    return JsonResponse(response_data)
+
+
 # 최상위 프로필
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
@@ -116,10 +140,8 @@ def profile(request, username):
 
     context = {
         "user": user,
-        # 유저가 속한 행성 중 즐겨찾기 한 행성
-        "user_by_planets_star": user_by_planets_star,
-        # 유저가 속한 행성 중 즐겨찾기 안 한 행성
-        "user_by_planets_not_star": user_by_planets_not_star,
+        "user_by_planets_star": user_by_planets_star,  # 유저가 속한 행성 중 즐겨찾기 한 행성
+        "user_by_planets_not_star": user_by_planets_not_star,  # 유저가 속한 행성 중 즐겨찾기 안 한 행성
     }
     return render(request, "accounts/profile.html", context)
 
