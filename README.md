@@ -27,7 +27,7 @@ Catsmos 를 설치하는 방법은 다음과 같습니다:
 2. 프로젝트 디렉토리로 이동: `cd KDT_FinalProject`
 3. 의존성 패키지 설치: `pip install -r requirements.txt`
 4. 마이그레이션 실행: `python manage.py migrate`
-5. 환경 설정: .env 파일에 SECRET_KEY, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST_PASSWORD 값 작성
+5. 환경 설정: .env 파일에 SECRET_KEY, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD 값 작성
 6. 서버 시작: `python manage.py runserver`
 
 ## 연락처
