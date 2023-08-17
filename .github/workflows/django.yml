@@ -29,4 +29,4 @@ jobs:
       run: |
         python manage.py test
       env:
-        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        DJANGO_SECRET_KEY: "0-42!#@*6jqo)lv^+@-+&(-@kjke@xzk%)1!w)vz-1uwk71p)="
