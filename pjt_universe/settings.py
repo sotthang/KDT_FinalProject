@@ -36,8 +36,8 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost", "sotthang.synology.me"]
 # Application definition
 
 INSTALLED_APPS = [
-    "apps.app_accounts",
-    "apps.app_planets",
+    "app.accounts",
+    "app.planets",
     "crispy_forms",
     "crispy_tailwind",
     "imagekit",
@@ -155,7 +155,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "app_accounts.User"
+AUTH_USER_MODEL = "accounts.User"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 

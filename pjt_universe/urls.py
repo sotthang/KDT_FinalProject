@@ -20,9 +20,9 @@ from django.conf import settings
 from django_prometheus import exports as prometheus_exports
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('apps.app_accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('metrics/', prometheus_exports.ExportToDjangoView),
-    path('', include('apps.app_planets.urls')),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("app.accounts.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("metrics/", prometheus_exports.ExportToDjangoView),
+    path("", include("app.planets.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
