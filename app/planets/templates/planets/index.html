@@ -12,15 +12,10 @@
 
 {% block content %}
 
-<!-- 게시글 작성하기 제거 중 -->
 <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
   <div class="p-5">
     <form id="post-form" data-planet-name="{{ planet.name }}">
       {% csrf_token %}
-      {% comment %} {{ postform | crispy }}
-      <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto" style="text-align: center;">
-        <p>게시글 작성</p>
-      </button> {% endcomment %}
     </form>
   </div>
 </div>
@@ -57,10 +52,7 @@
           </div>
           <div class="mb-5" id="post-image" style="width: 30%;">
           </div>
-          
-          {% comment %} {% for votetopic in votetopics %} {% endcomment %}
           <div class="mb-5 rounded-md p-1" id="post-votetopics"></div>
-          {% comment %} {% endfor %} {% endcomment %}
 
         </div>
         

@@ -1,6 +1,4 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model, login
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Accountbyplanet, User
 from app.planets.models import Planet
 from .forms import (
@@ -10,26 +8,25 @@ from .forms import (
     CustomSetPasswordForm,
     CustomUserChangeForm,
 )
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
-from django.contrib.auth import update_session_auth_hash
-from django.views import View
 from django.contrib import messages
-from django.conf import settings
-from django.urls import reverse_lazy
-from django.contrib.auth.forms import PasswordChangeForm
-from django.core.exceptions import ObjectDoesNotExist
-from django.core import signing  # 암호화
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model, login, update_session_auth_hash
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.views import PasswordResetConfirmView  # 비밀번호 리셋
 from django.contrib.auth.tokens import default_token_generator
+from django.views import View
+from django.views.generic.detail import DetailView
+from django.conf import settings
+from django.urls import reverse, reverse_lazy
+from django.core import signing  # 암호화
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, JsonResponse
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from django.urls import reverse  # from base64 import urlsafe_base64_decode
-from django.contrib.auth.views import PasswordResetConfirmView  # 비밀번호 리셋
 from http import HTTPStatus
 
 
@@ -82,7 +79,7 @@ class LoginView(View):
 
 class SignupView(View):
     """
-    회원가입 처리
+    회원가입
     """
 
     template_name = "accounts/signup.html"
@@ -158,62 +155,132 @@ def get_user(request):
         return JsonResponse(data=[], status=HTTPStatus.NOT_FOUND)
 
 
-@login_required
-def password(request):
-    if request.method == "POST":
+class PasswordView(LoginRequiredMixin, View):
+    """
+    비밀번호 변경
+    """
+
+    template_name = "accounts/change_password.html"
+
+    def get(self, request):
+        """
+        로그인 안되어 있으면 login 으로 redirect
+        로그인 되어 있으면 비밀번호 변경 페이지 렌더링
+        """
+
+        if not request.user.is_authenticated:
+            return redirect("accounts:login")
+        return render(
+            request,
+            self.template_name,
+            {
+                "form": PasswordChangeForm(request.user),
+            },
+        )
+
+    def post(self, request):
+        """
+        로그인 안되어 있으면 login 으로 redirect
+        로그인 되어 있으면 비밀번호 변경 진행 후 main 으로 redirect
+        비밀번호 변경 실패하면 비밀번호 변경 페이지에서 실패 문구 출력
+        """
+
+        if not request.user.is_authenticated:
+            return redirect("accounts:login")
+
         form = PasswordChangeForm(request.user, request.POST)
         if not form.is_valid():
-            messages.error(request, "패스워드를 확인해주세요.")
-        else:
-            update_session_auth_hash(request, form.save())
-            return redirect("planets:main")
-    else:
-        form = PasswordChangeForm(request.user)
-    context = {
-        "form": form,
-    }
-    return render(request, "accounts/change_password.html", context)
+            messages.error(request, "양식을 확인해주세요.")
+            return render(
+                request,
+                self.template_name,
+                {
+                    "form": form,
+                },
+            )
+        update_session_auth_hash(request, form.save())
+        return redirect("planets:main")
 
 
-# 최상위 프로필
+class ProfileUpdateView(LoginRequiredMixin, View):
+    """
+    메인 프로필
+    """
+
+    template_name = "accounts/update.html"
+
+    def get(self, request):
+        """
+        로그인 안되어 있으면 login 으로 redirect
+        로그인 되어 있으면 메인 프로필 수정 페이지 렌더링
+        """
+
+        if not request.user.is_authenticated:
+            return redirect("accounts:login")
+
+        return render(
+            request,
+            self.template_name,
+            {"form": CustomUserChangeForm(instance=request.user)},
+        )
+
+    def post(self, request):
+        """
+        로그인 안되어 있으면 login 으로 redirect
+        로그인 되어 있으면 프로필 정보 수정 진행 후 main 으로 redirect
+        프로필 정보 수정 실패하면 프로필 정보 수정 페이지에서 실패 문구 출력
+        """
+
+        if not request.user.is_authenticated:
+            return redirect("accounts:login")
+
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if not form.is_valid():
+            messages.error(request, "양식을 확인해주세요.")
+            return render(
+                request,
+                self.template_name,
+                {
+                    "form": form,
+                },
+            )
+        form.save()
+        return redirect("accounts:profile", username=request.user)
+
+
+@login_required
 def profile(request, username):
+    """
+    프로필 페이지
+    """
+
     user = get_object_or_404(get_user_model(), username=username)
     user_by_planets = Accountbyplanet.objects.filter(user=user)
 
-    context = {
-        "user": user,
-        "user_by_planets_star": [
-            accountbyplanet
-            for accountbyplanet in user_by_planets
-            if accountbyplanet.has_star
-        ],  # 유저가 속한 행성 중 즐겨찾기 한 행성
-        "user_by_planets_not_star": [
-            accountbyplanet
-            for accountbyplanet in user_by_planets
-            if not accountbyplanet.has_star
-        ],  # 유저가 속한 행성 중 즐겨찾기 안 한 행성
-    }
-    return render(request, "accounts/profile.html", context)
+    return render(
+        request,
+        "accounts/profile.html",
+        {
+            "user": user,
+            "user_by_planets_star": [
+                accountbyplanet
+                for accountbyplanet in user_by_planets
+                if accountbyplanet.has_star
+            ],  # 유저가 속한 행성 중 즐겨찾기 한 행성
+            "user_by_planets_not_star": [
+                accountbyplanet
+                for accountbyplanet in user_by_planets
+                if not accountbyplanet.has_star
+            ],  # 유저가 속한 행성 중 즐겨찾기 안 한 행성
+        },
+    )
 
 
-# 최상위 프로필 업데이트
 @login_required
-def profile_update(request):
-    if request.method == "POST":
-        form = CustomUserChangeForm(request.POST, instance=request.user)
-
-        if form.is_valid():
-            form.save()
-            return redirect("accounts:profile", username=request.user)
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-
-    context = {"form": form}
-    return render(request, "accounts/update.html", context)
-
-
-# 행성별 프로필
 def planet_profile(request, planet_name, nickname):
+    """
+    행성 별 프로필
+    """
     planet = get_object_or_404(Planet, name=planet_name)
     user_by_planet = get_object_or_404(
         Accountbyplanet, planet=planet, nickname=nickname
@@ -227,9 +294,11 @@ def planet_profile(request, planet_name, nickname):
     return render(request, "accounts/planet_profile.html", context)
 
 
-# 행성별 프로필 업데이트
 @login_required
 def planet_profile_update(request, planet_name, nickname):
+    """
+    행성 별 프로필 수정
+    """
     planet = get_object_or_404(Planet, name=planet_name)
     user_by_planet = get_object_or_404(
         Accountbyplanet, planet=planet, nickname=nickname
@@ -257,75 +326,80 @@ def planet_profile_update(request, planet_name, nickname):
     return render(request, "accounts/planet_update.html", context)
 
 
-# 아이디 찾기
 class find_id(View):
+    """
+    아이디 찾기
+    """
+
     def get(self, request):
+        """
+        아이디 찾기 페이지 렌더링
+        """
+
         return render(request, "accounts/find_id.html")
 
     def post(self, request):
-        email = request.POST.get("email")
+        """
+        아이디 찾기 진행
+        """
+
+        email = request.DATA.get("email")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
 
         try:
-            # 입력받은 정보로 유저 검색
             user_found = User.objects.get(
                 email=email, first_name=first_name, last_name=last_name
             )
             context = {
                 "user_found": user_found,
             }
-            # 일치하는 정보의 유저가 있다면 결과 페이지로 이동
             return render(request, "accounts/find_id_result.html", context)
-
         except:
-            # 일치하는 정보의 유저가 없으면 메시지 출력 후 다시 아이디를 찾을 수 있도록 함
             context = {"message": "일치하는 정보가 없습니다. "}
             return render(request, "accounts/find_id.html", context)
 
 
-# 계정 삭제
 @login_required
 def delete(request):
-    # 계정 정보 삭제 후 로그아웃
+    """
+    회원 탈퇴
+    """
     request.user.delete()
     auth_logout(request)
     return redirect("planets:main")
 
 
-# 로그아웃
 @login_required
 def logout(request):
+    """
+    로그아웃
+    """
     auth_logout(request)
     return redirect("planets:main")
 
 
-# 메일 주소 인증(회원가입 중)
 def send_verification_email(request, user):
+    """
+    메일 주소 인증
+    """
+
     token = default_token_generator.make_token(user)  # 유저 토큰
     uid = urlsafe_base64_encode(force_bytes(user.pk))  # uid는 유저pk를 암호화
-
     verification_link = reverse(
         "accounts:activate", kwargs={"uidb64": uid, "token": token}
     )
     verification_url = request.build_absolute_uri(verification_link)
-
     subject = "[캣츠모스] 계정 활성화"
-
-    # 이메일 템플릿에 전달할 컨텍스트 생성
     context = {
         "user": user,
         "verification_url": verification_url,
     }
 
-    # 이메일 내용을 렌더링
-    email_text = render_to_string("accounts/verification_email.txt", context)
-
-    # 이메일 전송
     try:
         send_mail(
             subject,
-            email_text,
+            render_to_string("accounts/verification_email.txt", context),
             settings.EMAIL_HOST_USER,
             [user.email],
         )
@@ -333,43 +407,35 @@ def send_verification_email(request, user):
         return HttpResponse("Invalid header.")
 
 
-# 메일 인증 페이지(메일에 담긴 링크)
 def activation_view(request, uidb64, token):
+    """
+    메일 인증 페이지
+    """
+
     try:
         uid = urlsafe_base64_decode(uidb64).decode("utf-8")  # 유저 pk
         user = User.objects.get(pk=int(uid))
-
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        # 유효하지 않은 uidb64 값이거나 해당하는 유저가 없는 경우 처리
         return redirect("accounts:activation_failed")
 
-    # 토큰이 유효한 경우
     if default_token_generator.check_token(user, token):
-        # 계정 활성화
         user.is_active = True
         user.save()
-
         return render(request, "accounts/activation.html")
     else:
-        # 토큰이 유효하지 않은 경우 처리
         return redirect("accounts:activation_failed")
 
 
-# 계정활성화 메일 보냈다는 view
 def verification_sent(request, signed_email, token):
+    """
+    메일 발송 후 페이지
+    """
     try:
-        # 이메일 복호화
         user_email = signing.loads(signed_email)
         context = {"user_email": user_email}
-
-        type = request.GET.get("type")
-
-        user = get_user_model()
-        user = user.objects.get(email=user_email)
-
+        user = get_user_model().objects.get(email=user_email)
         session_token = request.session.get("temp_token")
-
-        if type == "re":
+        if request.GET.get("type") == "re":
             send_verification_email(request, user)
             return render(request, "accounts/verification_sent.html", context)
         elif session_token and session_token == token:
@@ -378,14 +444,15 @@ def verification_sent(request, signed_email, token):
             return render(request, "accounts/verification_sent.html", context)
         else:
             return render(request, "accounts/verification_sent.html", context)
-
     except signing.BadSignature:
-        # 암호화된 이메일 주소가 올바르지 않은 경우 처리
         return render(request, "accounts/not_found.html")
 
 
-# 비밀번호 초기화 이메일 전송
 def password_reset_request(request):
+    """
+    비밀번호 초기화 이메일 전송
+    """
+
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
         if password_reset_form.is_valid():
@@ -418,12 +485,8 @@ def password_reset_request(request):
                     except BadHeaderError:
                         return HttpResponse("Invalid header found.")
                     return redirect("accounts:password_reset_done")
-
-            else:  # 유저가 존재 하지 않음
+            else:
                 messages.error(request, "존재하지 않는 이메일 주소입니다.")
-
-    else:
-        password_reset_form = PasswordResetForm()
 
     password_reset_form = PasswordResetForm()
     return render(
@@ -434,5 +497,9 @@ def password_reset_request(request):
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    """
+    비밀번호 초기화
+    """
+
     form_class = CustomSetPasswordForm
     success_url = reverse_lazy("planets:main")
