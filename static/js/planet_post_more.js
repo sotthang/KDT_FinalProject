@@ -280,27 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Post deletion failed.');
           }
         })
-        .then(function (response) {
-          if (response.data.success) {
-            var formHtml = response.data.form_html;
-            var formContainer = document.createElement('div');
-            formContainer.innerHTML = formHtml;
-            var formElement = document.createElement('form');
-            formElement.id = 'edit-post-form';
-            formElement.setAttribute('data-planet-name', planetName);
-            formElement.setAttribute('data-post-pk', postPk);
-            formElement.appendChild(formContainer);
-            var submitButton = document.createElement('button');
-            submitButton.id = 'edit-post-button';
-            submitButton.textContent = 'Update';
-            submitButton.type = 'submit';
-            formContainer.append(submitButton);
-            postContainer.querySelector('#section').style.display = 'none';
-            postContainer.append(formElement);
-          } else {
-            console.error('Post deletion failed.');
-          }
-        })
         .catch(function (error) {
           console.error('AJAX request failed:', error);
         });

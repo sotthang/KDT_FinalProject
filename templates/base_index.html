@@ -74,7 +74,6 @@
     </div>
   </div>
 
-  <!-- 문제 -->
   <div class="bg-[#282c37] flex-row items-center justify-between mx-auto ">
     <div class="hidden border-b-1 border-[#393f4f] w-full" id="navbar-hamburger">
       <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-1 border-[#393f4f]">
@@ -94,19 +93,16 @@
             </p>
           </div>
         </div>
-
         <div>
           <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
             <a href="{% url 'accounts:services' %}" class="text-white">service 소개</a>
           </button>
         </div>
-
         <div>
           <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
             <a href="{% url 'accounts:membership' %}" class="text-white">멤버십 가입</a>
           </button>
         </div>
-
         <h2 id="accordion-collapse-heading-6">
           <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-6" aria-expanded="false" aria-controls="accordion-collapse-body-6">
             <span class="text-white">계정 관리</span>
@@ -116,7 +112,7 @@
         <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
           <div class="p-3 text-sm">
             <p class="mb-3 hover-grow-fast">
-              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
+              <a href="{% url 'accounts:profile' request.user.username  %}" class="mb-5 text-white">계정 프로필</a>
             </p>
             <p class="mb-3 hover-grow-fast">
               <a href="{% url 'accounts:profile_update' %}" class="text-white">회원정보 수정</a>
@@ -446,7 +442,7 @@
         <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
           <div class="p-5">
             <p class="mb-5 hover-grow-fast">
-              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
+              <a href="{% url 'accounts:profile' request.user.username  %}" class="mb-5 text-white">계정 프로필</a>
             </p>
 
             <p class="mb-5 hover-grow-fast">
@@ -528,6 +524,5 @@
 <script src="{% static 'js/base_index.js' %}"></script>
 
 {% block script %}
-
 {% endblock script %}
 </html>
