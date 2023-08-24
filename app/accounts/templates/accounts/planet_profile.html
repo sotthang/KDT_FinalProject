@@ -12,7 +12,7 @@ solid gray; height : auto; } .line-break { word-wrap: break-word; width: 500px;
 {% block content %}
 <div class="flex">
   <a
-    href="javascript:history.back()"
+    href="{% url 'planets:index' user_by_planet.planet.name %}"
     class="flex items-center pl-5 text-[#ffd951]"
     style="height: 50px"
   >
